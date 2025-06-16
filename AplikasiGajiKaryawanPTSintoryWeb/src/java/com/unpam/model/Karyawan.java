@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.unpam.view.PesanDialog;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -116,4 +118,51 @@ public class Karyawan {
         }
         return !adaKesalahan;
     }
+    
+    public boolean bacaData(int mulai, int jumlah){
+    boolean adaKesalahan = false;
+    Connection connection;
+    list = new Object[0][0];
+
+    if ((connection = koneksi.getConnection()) != null){
+        String SQLStatemen;
+        PreparedStatement preparedStatement;
+        ResultSet rset;
+
+        try {
+            SQLStatemen = "select ktp, nama from tbkaryawan"
+                + " limit " + mulai + "," + jumlah;
+            preparedStatement = connection.prepareStatement(SQLStatemen);
+            rset = preparedStatement.executeQuery();
+
+            // Contoh pengisian list (bisa disesuaikan dengan jumlah kolom dan kebutuhan)
+            List<Object[]> tempList = new ArrayList<>();
+            while (rset.next()) {
+                Object[] row = new Object[2];
+                row[0] = rset.getString("ktp");
+                row[1] = rset.getString("nama");
+                tempList.add(row);
+            }
+
+            list = new Object[tempList.size()][2];
+            for (int i = 0; i < tempList.size(); i++) {
+                list[i] = tempList.get(i);
+            }
+
+            rset.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            adaKesalahan = true;
+            System.out.println("Kesalahan SQL: " + e.getMessage());
+        }
+    } else {
+        adaKesalahan = true;
+        System.out.println("Koneksi gagal.");
+    }
+
+    return !adaKesalahan;
+}
+
+    
 }

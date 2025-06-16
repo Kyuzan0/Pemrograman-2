@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;  
 import java.sql.Statement;  
 import com.unpam.view.PesanDialog;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -98,5 +100,50 @@ public boolean simpan() {
 
         return !adaKesalahan;
     }
+
+public boolean bacaData(int mulai, int jumlah){
+    boolean adaKesalahan = false;
+    Connection connection;
+    list = new Object[0][0];
+
+    if ((connection = koneksi.getConnection()) != null){
+        String SQLStatemen;
+        Statement sta;
+        ResultSet rset;
+
+        try {
+            SQLStatemen = "select kodepekerjaan, namapekerjaan from tbpekerjaan"
+                        + " limit " + mulai + "," + jumlah;
+            sta = connection.createStatement();
+            rset = sta.executeQuery(SQLStatemen);
+
+            List<Object[]> tempList = new ArrayList<>();
+            while (rset.next()) {
+                Object[] row = new Object[2];
+                row[0] = rset.getString("kodepekerjaan");
+                row[1] = rset.getString("namapekerjaan");
+                tempList.add(row);
+            }
+
+            list = new Object[tempList.size()][2];
+            for (int i = 0; i < tempList.size(); i++) {
+                list[i] = tempList.get(i);
+            }
+
+            rset.close();
+            sta.close();
+            connection.close();
+        } catch (SQLException e) {
+            adaKesalahan = true;
+            System.out.println("Kesalahan SQL: " + e.getMessage());
+        }
+    } else {
+        adaKesalahan = true;
+        System.out.println("Koneksi gagal.");
+    }
+
+    return !adaKesalahan;
+}
+
 
 }
