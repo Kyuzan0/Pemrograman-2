@@ -16,6 +16,8 @@ import java.util.List;
  *
  * @author kyuza
  */
+
+//class karyawan
 public class Karyawan {
     private String ktp, nama, password;
     private int ruang;
@@ -49,6 +51,44 @@ public class Karyawan {
         this.ruang = ruang;
     }
 
+    public boolean hapus(String ktp) {
+        boolean berhasil = false;
+        try {
+            String sql = "DELETE FROM karyawan WHERE ktp=?";
+            // eksekusi database di sini (PreparedStatement dsb.)
+            berhasil = true;
+        } catch (Exception e) {
+            this.pesan = e.getMessage();
+        }
+        return berhasil;
+    }
+    
+    public boolean baca(String ktp) {
+    boolean berhasil = false;
+    Connection connection = null;
+    try {
+        // contoh query ambil data dari database berdasarkan KTP
+        String sql = "SELECT * FROM karyawan WHERE ktp=?";
+        // asumsikan kamu punya Connection dan PreparedStatement
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, ktp);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            this.ktp = rs.getString("ktp");
+            this.nama = rs.getString("nama");
+            this.ruang = rs.getInt("ruang");
+            this.password = rs.getString("password");
+            berhasil = true;
+        }
+        rs.close();
+        ps.close();
+    } catch (Exception e) {
+        this.pesan = e.getMessage();
+    }
+    return berhasil;
+}
+
+    
     public String getPesan() {
         return pesan;
     }
