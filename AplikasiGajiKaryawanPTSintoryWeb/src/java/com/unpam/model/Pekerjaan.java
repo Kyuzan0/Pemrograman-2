@@ -101,6 +101,62 @@ public boolean simpan() {
         return !adaKesalahan;
     }
 
+public boolean baca(String kode) {
+    boolean adaKesalahan = false;
+    Connection connection;
+    
+    if ((connection = koneksi.getConnection()) != null) {
+        String sql = "SELECT * FROM tbpekerjaan WHERE kodePekerjaan = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, kode);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                kodePekerjaan = rs.getString("kodePekerjaan");
+                namaPekerjaan = rs.getString("namaPekerjaan");
+                jumlahTugas = rs.getInt("jumlahTugas");
+            } else {
+                adaKesalahan = true;
+                pesan = "Data pekerjaan tidak ditemukan";
+            }
+            rs.close();
+        } catch (SQLException e) {
+            adaKesalahan = true;
+            pesan = "Kesalahan SQL: " + e.getMessage();
+        }
+    } else {
+        adaKesalahan = true;
+        pesan = "Koneksi ke database gagal";
+    }
+
+    return !adaKesalahan;
+}
+
+public boolean hapus(String kode) {
+    boolean adaKesalahan = false;
+    Connection connection;
+
+    if ((connection = koneksi.getConnection()) != null) {
+        String sql = "DELETE FROM tbpekerjaan WHERE kodePekerjaan = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, kode);
+            int hasil = ps.executeUpdate();
+            if (hasil < 1) {
+                adaKesalahan = true;
+                pesan = "Data tidak ditemukan atau gagal dihapus";
+            }
+        } catch (SQLException e) {
+            adaKesalahan = true;
+            pesan = "Kesalahan SQL: " + e.getMessage();
+        }
+    } else {
+        adaKesalahan = true;
+        pesan = "Koneksi ke database gagal";
+    }
+
+    return !adaKesalahan;
+}
+
+
 public boolean bacaData(int mulai, int jumlah){
     boolean adaKesalahan = false;
     Connection connection;
