@@ -31,75 +31,77 @@ public class MainForm extends HttpServlet {
      */
     public void tampilkan(String konten, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(true);
+            response.setContentType("text/html;charset=UTF-8");
+            HttpSession session = request.getSession(true);
 
-        String menu = "<br><b>Master Data</b><br>"
-                + "<a href='Karyawan'>Karyawan</a><br>"
-                + "<a href='Pekerjaan'>Pekerjaan</a><br>"
-                + "<b>Transaksi</b><br>"
-                + "<a href='Gaji'>Gaji</a><br>"
-                + "<b>Laporan</b><br>"
-                + "<a href='LaporanGaji'>Gaji</a><br>"
-                + "<a href='LoginController'>Login</a><br><br>";
+            String menu = "<br><b>Master Data</b><br>"
+                    + "<a href='KaryawanController'>Karyawan</a><br>"
+                    + "<a href='PekerjaanController'>Pekerjaan</a><br>"
+                    + "<b>Transaksi</b><br>"
+                    + "<a href='Gaji'>Gaji</a><br>"
+                    + "<b>Laporan</b><br>"
+                    + "<a href='LaporanGaji'>Gaji</a><br>"
+                    + "<a href='LoginController'>Login</a><br><br>";
 
-        String topMenu = "<nav><ul>"
-                + "<li><a href='Home'>Home</a></li>"
-                + "<li><a href='#'>Master Data</a><ul>"
-                + "<li><a href='Karyawan'>Karyawan</a></li>"
-                + "<li><a href='Pekerjaan'>Pekerjaan</a></li>"
-                + "</ul></li>"
-                + "<li><a href='Transaksi'>Transaksi</a></li>"
-                + "<li><a href='Gaji'>Gaji</a></li>"
-                + "<li><a href='#'>Laporan</a><ul><li><a href='LaporanGaji'>Gaji</a></li></ul></li>"
-                + "<li><a href='LoginController'>Login</a></li>"
-                + "</ul></nav>";
+            String topMenu = "<nav><ul>"
+                    + "<li><a href='Home'>Home</a></li>"
+                    + "<li><a href='#'>Master Data</a><ul>"
+                    + "<li><a href='KaryawanController'>Karyawan</a></li>"
+                    + "<li><a href='PekerjaanController'>Pekerjaan</a></li>"
+                    + "</ul></li>"
+                    + "<li><a href='Transaksi'>Transaksi</a></li>"
+                    + "<li><a href='Gaji'>Gaji</a></li>"
+                    + "<li><a href='#'>Laporan</a><ul><li><a href='LaporanGaji'>Gaji</a></li></ul></li>"
+                    + "<li><a href='LoginController'>Login</a></li>"
+                    + "</ul></nav>";
 
-        session.setAttribute("menu", menu);
-        session.setAttribute("topMenu", topMenu);
+            session.setAttribute("menu", menu);
+            session.setAttribute("topMenu", topMenu);
 
-        String userName = "";
+            String userName = "";
 
-        if (!session.isNew()) {
+            if (!session.isNew()) {
+                try {
+                    userName = session.getAttribute("userName").toString();
+                } catch (Exception ex) {
+                    userName = "";
+                }
+            }
+
+
+            if ((userName == null) || userName.equals("")) {
+                if (konten == null || konten.equals("")) {
+                    konten = "<br><h1>Selamat Datang</h1><h2>" + userName + "</h2>";
+                }
+    }
+
             try {
-                userName = session.getAttribute("userName").toString();
-            } catch (Exception ex) {
-                userName = "";
+                menu = session.getAttribute("menu").toString();
+            } catch (Exception ex) {}
+
+            try {
+                topMenu = session.getAttribute("topMenu").toString();
+            } catch (Exception ex) {}
+
+            try (PrintWriter out = response.getWriter()) {
+                out.println("<!DOCTYPE html><html><head><title>Informasi Gaji Karyawan</title>");
+                out.println("<link href='" + request.getContextPath() + "/style.css' rel='stylesheet' type='text/css' />");
+                out.println("<body bgcolor='#808080'><center><table width='80%' bgcolor='#eeeeee'>");
+
+                out.println("<tr><td colspan='2' align='center'>");
+                out.println("<h2>Informasi Gaji Karyawan</h2><i>PT Sinergy</i>");
+                out.println("Jl. Surya Kencana No. 99 Pamulang, Tangerang Selatan, Banten</td></tr>");
+
+                out.println("<tr><td align='center' valign='top' bgcolor='#ffeeff'>" + menu + "</td>");
+                out.println("<td align='center' valign='top' bgcolor='#ffffff'>" + topMenu + "<br>" + konten + "</td></tr>");
+
+                out.println("<tr><td colspan='2' align='center' bgcolor='#ffeeff'><small>");
+                out.println("Copyright &copy; 2017 PT Sinergy<br>");
+                out.println("Jl. Surya Kencana No. 99 Pamulang, Tangerang Selatan, Banten</small></td></tr>");
+
+                out.println("</table></center></body></html>");
             }
         }
-
-
-        if ((userName == null) || userName.equals("")) {
-            konten = "<br><h1>Selamat Datang</h1><h2>" + userName + "</h2>";
-        }
-
-        try {
-            menu = session.getAttribute("menu").toString();
-        } catch (Exception ex) {}
-
-        try {
-            topMenu = session.getAttribute("topMenu").toString();
-        } catch (Exception ex) {}
-
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html><html><head><title>Informasi Gaji Karyawan</title>");
-            out.println("<link href='style.css' rel='stylesheet' type='text/css' /></head>");
-            out.println("<body bgcolor='#808080'><center><table width='80%' bgcolor='#eeeeee'>");
-
-            out.println("<tr><td colspan='2' align='center'>");
-            out.println("<h2>Informasi Gaji Karyawan</h2><i>PT Sinergy</i>");
-            out.println("Jl. Surya Kencana No. 99 Pamulang, Tangerang Selatan, Banten</td></tr>");
-
-            out.println("<tr><td align='center' valign='top' bgcolor='#ffeeff'>" + menu + "</td>");
-            out.println("<td align='center' valign='top' bgcolor='#ffffff'>" + topMenu + "<br>" + konten + "</td></tr>");
-
-            out.println("<tr><td colspan='2' align='center' bgcolor='#ffeeff'><small>");
-            out.println("Copyright &copy; 2017 PT Sinergy<br>");
-            out.println("Jl. Surya Kencana No. 99 Pamulang, Tangerang Selatan, Banten</small></td></tr>");
-
-            out.println("</table></center></body></html>");
-        }
-    }
     
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

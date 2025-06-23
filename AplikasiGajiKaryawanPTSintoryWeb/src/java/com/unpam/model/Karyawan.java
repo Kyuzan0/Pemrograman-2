@@ -63,16 +63,17 @@ public class Karyawan {
         return berhasil;
     }
     
-    public boolean baca(String ktp) {
+public boolean baca(String ktp) {
     boolean berhasil = false;
     Connection connection = null;
     try {
-        // contoh query ambil data dari database berdasarkan KTP
-        String sql = "SELECT * FROM karyawan WHERE ktp=?";
-        // asumsikan kamu punya Connection dan PreparedStatement
+        connection = koneksi.getConnection(); // gunakan koneksi yang sudah ada
+
+        String sql = "SELECT * FROM tbkaryawan WHERE ktp=?"; // GANTI INI!
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, ktp);
         ResultSet rs = ps.executeQuery();
+
         if (rs.next()) {
             this.ktp = rs.getString("ktp");
             this.nama = rs.getString("nama");
@@ -80,13 +81,18 @@ public class Karyawan {
             this.password = rs.getString("password");
             berhasil = true;
         }
+
         rs.close();
         ps.close();
+        connection.close();
     } catch (Exception e) {
-        this.pesan = e.getMessage();
+        this.pesan = "ERR: " + e.getMessage();
     }
+
     return berhasil;
 }
+
+
 
     
     public String getPesan() {

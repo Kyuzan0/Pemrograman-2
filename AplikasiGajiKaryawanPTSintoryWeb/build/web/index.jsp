@@ -15,20 +15,20 @@
     <body bgcolor="#808080">
         <%
             String menu="<br><b>Master Data</b><br>"
-                    + "<a href=.>Karyawan</a></br>"
-                    + "<a href=.>Pekerjaan</a><br>"
-                    + "<b>Transaksi</b><br>"
-                    + "<a href=.>Gaji</a><br>"
-                    + "<b>Laporan</b><br>"
-                    + "<a href=.>Gaji</a><br><br>"
-                    + "<a href=LoginController>Login</a><br><br>";
+                + "<a href='KaryawanController'>Karyawan</a><br>"
+                + "<a href='PekerjaanController'>Pekerjaan</a><br>"
+                + "<b>Transaksi</b><br>"
+                + "<a href='GajiController'>Gaji</a><br>"
+                + "<b>Laporan</b><br>"
+                + "<a href='LaporanGajiController'>Gaji</a><br><br>"
+                + "<a href='LoginController'>Login</a><br><br>";
             
                     String topMenu="<nav><ul>"
                             + "<li><a href=.>Home</a></li>"
                             + "<li><a href=#>Master Data</a>"
                             + "<ul>"
-                            + "<li><a href=.>Karyawan</a></li>"
-                            + "<li><a href=.>Pekerjaan</a></li>"
+                            + "<li><a href='KaryawanController'>Karyawan</a></li>"
+                            + "<li><a href='PekerjaanController'>Pekerjaan</a></li>"
                             + "</ul>"
                             + "</li>"
                             + "<li><a href=#>Transaksi</a>"
