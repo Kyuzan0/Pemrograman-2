@@ -179,14 +179,16 @@ public class KaryawanController extends HttpServlet {
 
         if (listKaryawan != null) {
             for (int i = 0; i < listKaryawan.length; i++) {
-                kontenLihat += "<tr><td>";
-                kontenLihat += "<input type='radio' " + (i == 0 ? "checked " : "") + "name='ktpDipilih' value='" + listKaryawan[i][0].toString() + "'>";
-                kontenLihat += "</td>";
-                kontenLihat += "<td>" + listKaryawan[i][0].toString() + "</td>";
-                kontenLihat += "<td>" + listKaryawan[i][1].toString() + "</td>";
-                kontenLihat += "<td>" + listKaryawan[i][2].toString() + "</td>";
-                kontenLihat += "<td>" + listKaryawan[i][3].toString() + "</td></tr>";
+            kontenLihat += "<tr><td>";
+            kontenLihat += "<input type='radio' " + (i == 0 ? "checked " : "") + "name='ktpDipilih' value='" + listKaryawan[i][0] + "'>";
+            kontenLihat += "</td>";
+
+            for (int j = 0; j < listKaryawan[i].length; j++) {
+                kontenLihat += "<td>" + listKaryawan[i][j] + "</td>";
             }
+
+            kontenLihat += "</tr>";
+        }
         }
 
         kontenLihat += "</table></td></tr><tr>";
@@ -206,6 +208,7 @@ public class KaryawanController extends HttpServlet {
     String konten =
         "<h2>Master Data Karyawan</h2>"
         + "<form action='KaryawanController' method='post'>"
+        + "<table>"    
         + "<tr><td align='right'>KTP</td><td align='left'><input type='text' value='" + ktp + "' name='ktp' maxlength='15' size='15'>"
         + "<input type='submit' name='tombol' value='Cari'></td></tr>"
         + "<tr><td align='right'>Nama</td><td align='left'><input type='text' value='" + nama + "' name='nama' maxlength='30' size='30'></td></tr>"
